@@ -21,3 +21,12 @@ TODO:Data Augment and Dewarp Algorithm.
 2.Prepared the dataset for training and validation.
 
 3.cmd->cd to your path->python main,py->running(first training your model use this network, then change the flag.mode to "test" mode or "visual" mode to identify the results).
+
+# RESULTS
+https://raymondmcguire.github.io/?e=Project_BookContent&&theme=Image-Process-Content
+
+# REFERENCE
+
+https://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Long_Fully_Convolutional_Networks_2015_CVPR_paper.html
+https://github.com/shelhamer/fcn.berkeleyvision.org
+https://github.com/shekkizh/FCN.tensorflow
