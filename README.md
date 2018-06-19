@@ -23,6 +23,9 @@ TODO:Data Augment and Dewarp Algorithm.
 3.cmd->cd to your path->python main,py->running(first training your model use this network, then change the flag.mode to "test" mode or "visual" mode to identify the results).
 
 # RESULTS
+loss value![Image text](https://raw.githubusercontent.com/RaymondMcGuire/BOOK-CONTENT-SEGMENTATION-AND-DEWARPING/master/result/loss/loss.jpg)
+
+
 https://raymondmcguire.github.io/?e=Project_BookContent&&theme=Image-Process-Content
 
 # REFERENCE
