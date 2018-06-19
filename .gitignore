@@ -1,2 +1,27 @@
 
 *.png
+__pycache__/data_process.cpython-36.pyc
+__pycache__/fcn.cpython-36.pyc
+logs/checkpoint
+logs/events.out.tfevents.1529331029.DESKTOP-SBI5HJ0
+logs/events.out.tfevents.1529331143.DESKTOP-SBI5HJ0
+logs/events.out.tfevents.1529333944.DESKTOP-SBI5HJ0
+logs/events.out.tfevents.1529367657.DESKTOP-SBI5HJ0
+logs/events.out.tfevents.1529367919.DESKTOP-SBI5HJ0
+logs/events.out.tfevents.1529368166.DESKTOP-SBI5HJ0
+logs/model.ckpt-7500.data-00000-of-00001
+logs/model.ckpt-7500.index
+logs/model.ckpt-7500.meta
+logs/model.ckpt-8000.data-00000-of-00001
+logs/model.ckpt-8000.index
+logs/model.ckpt-8000.meta
+logs/model.ckpt-8500.data-00000-of-00001
+logs/model.ckpt-8500.index
+logs/model.ckpt-8500.meta
+logs/model.ckpt-9000.data-00000-of-00001
+logs/model.ckpt-9000.index
+logs/model.ckpt-9000.meta
+logs/model.ckpt-9500.data-00000-of-00001
+logs/model.ckpt-9500.index
+logs/model.ckpt-9500.meta
+pre_data/imagenet-vgg-verydeep-19.mat

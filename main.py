@@ -5,6 +5,7 @@ Created on Thu May  3 18:55:35 2018
 @author: raymondmg
 """
 import tensorflow as tf
+import matplotlib.pyplot as plt
 import numpy as np
 import datetime
 import fcn
@@ -18,13 +19,24 @@ tf.flags.DEFINE_string("logs_dir", "./logs/", "path to logs directory")
 tf.flags.DEFINE_string("vgg_dir", "./pre_data/imagenet-vgg-verydeep-19.mat", "path to vgg directory")
 tf.flags.DEFINE_string("data_train_dir", "./data_book/", "path to train dataset")
 tf.flags.DEFINE_string("data_valid_dir", "./data_book_valid/", "path to valid dataset")
+tf.flags.DEFINE_string("pred_dir", "./result/pred/", "path to predict")
 tf.flags.DEFINE_float("learning_rate", "1e-6", "Learning rate for Adam Optimizer")
-tf.flags.DEFINE_string('mode', "train", "Mode train/ test/ visualize")
+tf.flags.DEFINE_string('mode', "test", "Mode train/ test/ visualize")
 
-MAX_ITERATION = 20000
+MAX_ITERATION = 10000
 NUM_OF_CLASSESS = 3
 IMAGE_SIZE_HEIGHT = 400
 IMAGE_SIZE_WIDTH = 300
+
+def drawgraph(plot_x_train,plot_x_valid,plot_error,plot_validation_error):
+    
+    plt.figure(1)
+    plt.subplot(211)
+    plt.plot(plot_x_train, plot_error)
+    plt.subplot(212)
+    plt.plot(plot_x_valid, plot_validation_error)
+    plt.savefig("./result/loss.jpg") 
+    
 
 def train(loss_val, var_list):
     optimizer = tf.train.AdamOptimizer(FLAGS.learning_rate)
@@ -35,6 +47,12 @@ def save_image(image, save_dir, name):
     misc.imsave(os.path.join(save_dir, name + ".png"), image)
 
 def main(argv=None):
+    
+    #graph 
+    plot_x_train = []
+    plot_x_valid = []
+    plot_validation_error = []
+    plot_error = []
     
     #param
     keep_probability = tf.placeholder(tf.float32, name="keep_probabilty")
@@ -85,16 +103,22 @@ def main(argv=None):
             sess.run(train_op, feed_dict=feed_dict)
 
             if itr % 10 == 0:
+                
                 train_loss, summary_str = sess.run([loss, summary_op], feed_dict=feed_dict)
                 print("Step: %d, Train_loss:%g" % (itr, train_loss))
+                plot_x_train.append(itr)
+                plot_error.append(train_loss)
                 summary_writer.add_summary(summary_str, itr)
 
             if itr % 500 == 0:
                 valid_images, valid_annotations = validation_dataset_reader.next_batch(FLAGS.batch_size)
                 valid_loss = sess.run(loss, feed_dict={image: valid_images, annotation: valid_annotations,
                                                        keep_probability: 1.0})
+                plot_x_valid.append(itr)
+                plot_validation_error.append(valid_loss)
                 print("%s ---> Validation_loss: %g" % (datetime.datetime.now(), valid_loss))
                 saver.save(sess, FLAGS.logs_dir + "model.ckpt", itr)
+        drawgraph(plot_x_train,plot_x_valid,plot_error,plot_validation_error)
     elif FLAGS.mode == "visualize":
         valid_images, valid_annotations = validation_dataset_reader.get_random_batch(FLAGS.batch_size)
         pred = sess.run(pred_annotation, feed_dict={image: valid_images, annotation: valid_annotations,
@@ -103,22 +127,26 @@ def main(argv=None):
         pred = np.squeeze(pred, axis=3)
 
         for itr in range(FLAGS.batch_size):
-            save_image(valid_images[itr].astype(np.uint8), FLAGS.logs_dir, name="inp_" + str(5+itr))
-            save_image(valid_annotations[itr].astype(np.uint8), FLAGS.logs_dir, name="gt_" + str(5+itr))
-            save_image(pred[itr].astype(np.uint8), FLAGS.logs_dir, name="pred_" + str(5+itr))
+            save_image(valid_images[itr].astype(np.uint8), FLAGS.pred_dir, name="inp_" + str(5+itr))
+            save_image(valid_annotations[itr].astype(np.uint8), FLAGS.pred_dir, name="gt_" + str(5+itr))
+            save_image(pred[itr].astype(np.uint8), FLAGS.pred_dir, name="pred_" + str(5+itr))
             print("Saved image: %d" % itr)
     elif FLAGS.mode == "test":
-        test_images, test_annotations = test_dataset_reader.get_random_batch(3)
-        pred = sess.run(pred_annotation, feed_dict={image: test_images, annotation: test_annotations,
-                                                    keep_probability: 1.0})
-        test_annotations = np.squeeze(test_annotations, axis=3)
-        pred = np.squeeze(pred, axis=3)
-
-        for itr in range(3):
-            save_image(test_images[itr].astype(np.uint8), FLAGS.pred_dir, name="inp_" + str(itr))
-            save_image(dp.visualize(test_annotations[itr].astype(np.uint8)), FLAGS.pred_dir, name="gt_" + str(itr))
-            save_image(dp.visualize(pred[itr].astype(np.uint8)), FLAGS.visual_dir, name="visual_" + str(itr))
+        
+        for itr in range(100):
+            test_images, test_annotations = test_dataset_reader.get_index_data(itr)
+            pred = sess.run(pred_annotation, feed_dict={image: test_images, annotation: test_annotations,
+                                                        keep_probability: 1.0})
+            test_annotations = np.squeeze(test_annotations, axis=3)
+            pred = np.squeeze(pred, axis=3)
+    
+            
+            save_image(test_images[0].astype(np.uint8), FLAGS.pred_dir, name="inp_" + str(itr))
+            save_image(dp.visualize(test_annotations[0].astype(np.uint8)), FLAGS.pred_dir, name="gt_" + str(itr))
+            save_image(dp.visualize(pred[0].astype(np.uint8)), FLAGS.pred_dir, name="visual_" + str(itr))
             print("Saved image: %d" % itr)
+    
+    
 
 
 if __name__ == "__main__":

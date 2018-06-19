@@ -90,5 +90,6 @@ class BatchDataSet:
     def get_random_batch(self, batch_size):
         indexes = np.random.randint(0, self.images.shape[0], size=[batch_size]).tolist()
         return self.images[indexes], self.annotations[indexes]
-    def get_all_batch(self):
-        return self.images, self.annotations
+    def get_index_data(self,idx):
+        index = [idx]
+        return self.images[index], self.annotations[index]
