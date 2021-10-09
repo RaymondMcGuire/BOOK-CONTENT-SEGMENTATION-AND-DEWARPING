@@ -25,8 +25,7 @@ TODO:Data Augment and Dewarp Algorithm.
 # RESULTS
 loss value![Image text](https://raw.githubusercontent.com/RaymondMcGuire/BOOK-CONTENT-SEGMENTATION-AND-DEWARPING/master/result/loss/loss.jpg)
 
-
-https://raymondmcguire.github.io/?e=Project_BookContent&&theme=Image-Process-Content
+[Project Page](https://raymondmgwx.github.io/?e=Project_BookContent&&theme=Image-Process-Content)
 
 # REFERENCE
 
